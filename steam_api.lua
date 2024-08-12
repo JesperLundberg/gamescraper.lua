@@ -5,7 +5,7 @@ local lunajson = require("lunajson")
 
 local config = require("config_local")
 
-function M.send_request()
+function M.get_raw_data_2_weeks()
 	local call_to_uri = http_request.new_from_uri(
 		"https://api.steampowered.com/IPlayerService/GetRecentlyPlayedGames/v0001/?key="
 			.. config.steam_api_key
@@ -21,12 +21,13 @@ function M.send_request()
 	end
 
 	local body = assert(stream:get_body_as_string())
-	print(body)
 	local decoded_body = lunajson.decode(body)
 
 	for _, v in ipairs(decoded_body.response.games) do
 		print(v.name)
 	end
+
+	return body
 end
 
 return M
