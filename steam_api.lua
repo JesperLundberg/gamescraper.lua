@@ -1,13 +1,17 @@
--- package.path = package.path .. ";local/share/lua/5.4/?.lua"
-
 local M = {}
 
 local http_request = require("http.request")
 local lunajson = require("lunajson")
 
+local config = require("config_local")
+
 function M.send_request()
 	local call_to_uri = http_request.new_from_uri(
-		"https://api.steampowered.com/IPlayerService/GetRecentlyPlayedGames/v0001/?key=117C47BC5FE8BEE05760813F7E724193&steamid=76561198051655301&format=json"
+		"https://api.steampowered.com/IPlayerService/GetRecentlyPlayedGames/v0001/?key="
+			.. config.steam_api_key
+			.. "&steamid="
+			.. config.steam_user_id
+			.. "&format=json"
 	)
 
 	local headers, stream = assert(call_to_uri:go())
@@ -21,7 +25,7 @@ function M.send_request()
 	local decoded_body = lunajson.decode(body)
 
 	for _, v in ipairs(decoded_body.response.games) do
-		print(v)
+		print(v.name)
 	end
 end
 

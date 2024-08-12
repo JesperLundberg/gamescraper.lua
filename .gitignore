@@ -62,5 +62,5 @@ luac.out
 # End of https://www.toptal.com/developers/gitignore/api/linux,lua
 
 # Custom
-.env.local
+config_local.lua
 db/*
