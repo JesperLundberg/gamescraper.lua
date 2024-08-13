@@ -1,0 +1,6 @@
+services:
+  scraper:
+    container_name: "scraper"
+    image: "scraper"
+    build: 
+      dockerfile: Dockerfile

@@ -29,7 +29,7 @@ function M.setup()
 end
 
 --- Get a record from the database by date
---- @param date osdate The date of the record
+--- @param date osdate|string The date of the record
 --- @return table The record
 function M.get_raw_data_by_date(date)
 	-- Find the record
@@ -37,7 +37,7 @@ function M.get_raw_data_by_date(date)
 end
 
 --- Update a record in the database
---- @param date osdate The date of the record
+--- @param date osdate|string The date of the record
 --- @param json string The JSON data to update
 function M.update_raw_data(date, json)
 	-- Find the record and update it
@@ -48,7 +48,7 @@ function M.update_raw_data(date, json)
 end
 
 --- Insert a new record into the database
---- @param date osdate The date of the record
+--- @param date osdate|string The date of the record
 --- @param json string The JSON data to insert
 function M.insert_raw_data(date, json)
 	-- Find out if the record already exists
