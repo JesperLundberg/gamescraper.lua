@@ -27,8 +27,13 @@
   "postCreateCommand": "bash .devcontainer/scripts/install-rocks.sh",
 
   // Uncomment to use the Docker CLI from inside the container. See https://aka.ms/vscode-remote/samples/docker-from-docker.
-  "mounts": [ "source=/home/jesper/.ssh/,target=/home/lua-user/.ssh/,type=bind",
-  "source=/home/jesper/.gitconfig,target=/home/lua-user/.gitconfig,type=bind"],
+  // "mounts": [ "source=/home/jesper/.ssh/,target=/home/lua-user/.ssh/,type=bind",
+  // "source=/home/jesper/.gitconfig,target=/home/lua-user/.gitconfig,type=bind"],
+
+  "mounts": [
+      "source=${localEnv:HOME},target=/host-home-folder,type=bind,consistency=cached",
+      //"source=${localWorkspaceFolder}/app-data,target=/data,type=bind,consistency=cached"
+  ]
 
   // Uncomment when using a ptrace-based debugger like C++, Go, and Rust
   // "runArgs": [ "--cap-add=SYS_PTRACE", "--security-opt", "seccomp=unconfined" ],

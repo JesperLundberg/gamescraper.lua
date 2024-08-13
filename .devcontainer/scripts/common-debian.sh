@@ -60,7 +60,7 @@ fi
 # Ensure apt is in non-interactive to avoid prompts
 export DEBIAN_FRONTEND=noninteractive
 
-apt update && apt upgrade -y
+apt update
 
 # Function to call apt-get if needed
 apt_get_update_if_needed()
@@ -92,8 +92,6 @@ if [ "${PACKAGES_ALREADY_INSTALLED}" != "true" ]; then
         ca-certificates \
         unzip \
         zip \
-        nano \
-        vim-tiny \
         less \
         jq \
         lsb-release \
@@ -113,6 +111,7 @@ if [ "${PACKAGES_ALREADY_INSTALLED}" != "true" ]; then
         man-db \
         strace \
         cmake \
+        luajit \
         init-system-helpers"
         
     # Needed for adding manpages-posix and manpages-posix-dev which are non-free packages in Debian

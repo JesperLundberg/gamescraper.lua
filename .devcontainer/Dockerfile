@@ -8,7 +8,7 @@ ARG INSTALL_ZSH="true"
 # [Option] Upgrade OS packages to their latest versions
 ARG UPGRADE_PACKAGES="true"
 
-ARG LUA_INSTALL_VERSION="5.4.4"
+ARG LUA_INSTALL_VERSION="5.1"
 ARG LUAROCKS_INSTALL_VERSION="3.11.1"
 ARG USERNAME=lua-user
 ARG USER_UID=1000
@@ -16,6 +16,7 @@ ARG USER_GID=$USER_UID
 
 # Install needed packages and setup non-root user. Use a separate RUN statement to add your own dependencies.
 COPY scripts/common-debian.sh /tmp/library-scripts/
+RUN apt update && apt install cmake -y && apt install luajit -y
 RUN bash /tmp/library-scripts/common-debian.sh "${INSTALL_ZSH}" "${USERNAME}" "${USER_UID}" "${USER_GID}" "${UPGRADE_PACKAGES}" "true" "true" 
 
 ENV LUA_VERSION_STR="lua-$LUA_INSTALL_VERSION"
@@ -32,7 +33,6 @@ RUN make install
 
 # ---------- Build & install Luarocks ----------
 WORKDIR /
-# https://luarocks.github.io/luarocks/releases/luarocks-3.11.1.tar.gz
 RUN wget https://luarocks.github.io/luarocks/releases/$LUAROCKS_VERSION_STR.tar.gz --no-check-certificate
 RUN tar zxpf $LUAROCKS_VERSION_STR.tar.gz
 WORKDIR $LUAROCKS_VERSION_STR
