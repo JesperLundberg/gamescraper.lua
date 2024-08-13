@@ -1,4 +1,4 @@
-local steam_api = require("steam_api")
+local steam_api = require("http.steam_api")
 local database = require("database.raw_data")
 
 -- Get the raw json data from the Steam API
