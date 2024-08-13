@@ -1,0 +1,7 @@
+# Directories
+**/.devcontainer/
+**/.git/
+
+# Files
+Dockerfile
+README.md
