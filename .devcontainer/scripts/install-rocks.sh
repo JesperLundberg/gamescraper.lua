@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 
-# luarocks config local_by_default true
-
 # Install rocks
-sudo luarocks install sqlite
-sudo luarocks install http
-sudo luarocks install lunajson
+sudo luarocks --lua-version 5.1 install sqlite
+sudo luarocks --lua-version 5.1 install http
+sudo luarocks --lua-version 5.1 install lunajson
