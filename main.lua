@@ -7,7 +7,7 @@ local utils = require("utils")
 local raw_json = steam_api.get_raw_data_2_weeks()
 
 -- Initialize the database
--- database_raw_data.setup()
+database_raw_data.setup()
 
 -- Get todays date in string format
 local date = os.date("%Y-%m-%d")

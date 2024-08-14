@@ -14,25 +14,27 @@ function M.setup()
 	-- 	vim.loop.fs_mkdir(dbdir, 493)
 	-- end
 
+	local db = sqlite:open(config.database_path)
+
 	-- Initialize the database
-	db = sqlite({
-		uri = config.database_path,
-		bronze_layer = {
-			date = { "date", unique = true, primary = true },
-			appid = "number",
-			name = "text",
-			playtime_2weeks = "number",
-			playtime_forever = "number",
-			img_icon_url = "text",
-			playtime_windows_forever = "number",
-			playtime_mac_forever = "number",
-			playtime_linux_forever = "number",
-			playtime_deck_forever = "number",
-		},
-		opt = {
-			lazy = true,
-		},
-	})
+	-- db = sqlite({
+	-- 	uri = config.database_path,
+	-- bronze_layer = {
+	-- 	date = { "date", unique = true, primary = true },
+	-- 	appid = "number",
+	-- 	name = "text",
+	-- 	playtime_2weeks = "number",
+	-- 	playtime_forever = "number",
+	-- 	img_icon_url = "text",
+	-- 	playtime_windows_forever = "number",
+	-- 	playtime_mac_forever = "number",
+	-- 	playtime_linux_forever = "number",
+	-- 	playtime_deck_forever = "number",
+	-- },
+	-- opt = {
+	-- 	lazy = true,
+	-- },
+	-- })
 
 	-- NOTE: The below works fine in online tester
 	-- CREATE TABLE IF NOT EXISTS bronze_layer (
@@ -52,19 +54,19 @@ function M.setup()
 	--
 	-- SELECT * FROM bronze_layer;
 
-	-- db:execute([[CREATE TABLE IF NOT EXISTS bronze_layer (
-	--      date TEXT,
-	--      appid INTEGER,
-	--      name TEXT NOT NULL,
-	--      playtime_2weeks INTEGER,
-	--      playtime_forever INTEGER,
-	--      img_icon_url TEXT,
-	--      playtime_windows_forever INTEGER,
-	--      playtime_mac_forever INTEGER,
-	--      playtime_linux_forever INTEGER,
-	--      playtime_deck_forever INTEGER,
-	--      PRIMARY KEY(date, appid)
-	--    );]])
+	db:execute([[CREATE TABLE IF NOT EXISTS bronze_layer (
+	     date TEXT,
+	     appid INTEGER,
+	     name TEXT NOT NULL,
+	     playtime_2weeks INTEGER,
+	     playtime_forever INTEGER,
+	     img_icon_url TEXT,
+	     playtime_windows_forever INTEGER,
+	     playtime_mac_forever INTEGER,
+	     playtime_linux_forever INTEGER,
+	     playtime_deck_forever INTEGER,
+	     PRIMARY KEY(date, appid)
+	   );]])
 
 	database = db
 end
