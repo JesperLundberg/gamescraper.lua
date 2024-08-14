@@ -17,22 +17,26 @@ function M.setup()
 	-- Initialize the database
 	db = sqlite({
 		uri = config.database_path,
-		bronze_layer = {
-			date = { "date", unique = true, primary = true },
-			appid = { "number", unique = true, primary = true },
-			name = "text",
-			playtime_2weeks = "number",
-			playtime_forever = "number",
-			img_icon_url = "text",
-			playtime_windows_forever = "number",
-			playtime_mac_forever = "number",
-			playtime_linux_forever = "number",
-			playtime_deck_forever = "number",
-		},
+		-- bronze_layer = {
+		-- 	date = { "date", unique = true, primary = true },
+		-- 	appid = { "number", unique = true, primary = true },
+		-- 	name = "text",
+		-- 	playtime_2weeks = "number",
+		-- 	playtime_forever = "number",
+		-- 	img_icon_url = "text",
+		-- 	playtime_windows_forever = "number",
+		-- 	playtime_mac_forever = "number",
+		-- 	playtime_linux_forever = "number",
+		-- 	playtime_deck_forever = "number",
+		-- },
 		opt = {
 			lazy = true,
 		},
 	})
+
+	db:execute(
+		"CREATE TABLE IF NOT EXISTS raw_game_data (date TEXT, appid INTEGER NOT NULL, name TEXT NOT NULL, playtime_2weeks INTEGER, playtime_forever INTEGER, img_icon_url TEXT, playtime_windows_forever INTEGER, playtime_mac_forever INTEGER, playtime_linux_forever INTEGER, playtime_deck_forever INTEGER, PRIMARY KEY(date, appid));"
+	)
 end
 
 --- Get a record from the database by date
