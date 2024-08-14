@@ -20,7 +20,7 @@ database_bronze_layer.setup()
 -- Make the raw json into a table
 local bronze_layer = utils.json_to_table(raw_json)
 
-database_bronze_layer.insert_bronze_layer({
+database_bronze_layer.insert_bronze_data({
 	date = date,
 	appid = bronze_layer.appid,
 	name = bronze_layer.name,

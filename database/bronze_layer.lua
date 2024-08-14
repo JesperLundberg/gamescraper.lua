@@ -82,7 +82,7 @@ end
 --- Update a record in the database
 --- @param date osdate|string The date of the record
 --- @param bronze_data table The table to update
-function M.update_bronze_layer(date, bronze_data)
+function M.update_bronze_data(date, bronze_data)
 	-- Find the record and update it
 	database.bronze_layer:update({
 		where = { date = date },
@@ -92,9 +92,9 @@ end
 
 --- Insert a new record into the database
 --- @param bronze_data table The table to insert
-function M.insert_bronze_layer(bronze_data)
+function M.insert_bronze_data(bronze_data)
 	-- Find out if the record already exists
-	if M.get_bronze_layer_by_date(bronze_data.date) then
+	if M.get_bronze_data_by_date(bronze_data.date) then
 		-- If it does, update it
 		M.update_bronze_layer(bronze_data.date, bronze_data)
 
