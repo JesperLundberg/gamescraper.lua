@@ -4,3 +4,5 @@ services:
     image: "scraper"
     build: 
       dockerfile: Dockerfile
+    volumes:
+      - /tmp/db/:/db/

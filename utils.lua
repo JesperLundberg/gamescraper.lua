@@ -1,5 +1,14 @@
 local M = {}
 
+local lunajson = require("lunajson")
+
+--- Convert a JSON string to a table
+--- @param json string The JSON string to convert
+--- @return table The table
+function M.json_to_table(json)
+	return lunajson.decode(json)
+end
+
 --- Get the configuration from the config_local.lua file if it exists, otherwise get the configuration from the config.lua file
 function M.get_config()
 	-- Check if the config_local.lua file exists
