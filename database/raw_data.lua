@@ -1,8 +1,10 @@
 local M = {}
 
 local sqlite = require("sqlite")
+local utils = require("utils")
+local config = utils.get_config()
 
--- Get the database directory
+-- The database
 local db
 
 --- Ensure the database exists
@@ -14,7 +16,7 @@ function M.setup()
 
 	-- Initialize the database
 	db = sqlite({
-		uri = "db/games.db",
+		uri = config.database_path,
 		raw_data = {
 			date = { "date", unique = true, primary = true },
 			json = "text",
