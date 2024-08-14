@@ -13,7 +13,7 @@ database_raw_data.setup()
 local date = os.date("%Y-%m-%d")
 
 -- Insert the raw json data into the database
--- database_raw_data.insert_raw_data(date, raw_json)
+database_raw_data.insert_raw_data(date, raw_json)
 
 database_bronze_layer.setup()
 
