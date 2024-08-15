@@ -6,7 +6,18 @@ local lunajson = require("lunajson")
 --- @param json string The JSON string to convert
 --- @return table The table
 function M.json_to_table(json)
-	return lunajson.decode(json)
+	return lunajson.decode(json).response
+end
+
+--- Flatten the table into a table with each row being a table
+function M.flatten_gamedata(tab)
+	local flattened_table = {}
+
+	for k, v in pairs(tab) do
+		table.insert(flattened_table, v)
+	end
+
+	return flattened_table
 end
 
 --- Get the configuration from the config_local.lua file if it exists, otherwise get the configuration from the config.lua file

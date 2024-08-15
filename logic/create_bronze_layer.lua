@@ -4,9 +4,10 @@ local database_bronze_layer = require("database.bronze_layer")
 local M = {}
 
 --- Create a bronze layer
-function M.create_bronze_layer()
-	-- Get the raw data
-	local raw_data = database_raw_data.get_raw_data_by_date(os.date("%Y-%m-%d"))
+--- @param date osdate|string The date of the bronze layer
+function M.create_bronze_layer(date)
+	-- Get the raw data by sent in date or todays date
+	local raw_data = database_raw_data.get_raw_data_by_date(date or os.date("%Y-%m-%d"))
 
 	-- Create the bronze layer
 	local bronze_layer = {
