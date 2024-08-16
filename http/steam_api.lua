@@ -29,12 +29,6 @@ function M.get_raw_data_2_weeks()
 	-- Get the body of the HTTP response as a string
 	local body = assert(stream:get_body_as_string())
 
-	-- NOTE: Temporary, remove this
-	local decoded_body = lunajson.decode(body)
-	for _, v in ipairs(decoded_body.response.games) do
-		print(v.name)
-	end
-
 	-- Return the body (in json format)
 	return body
 end

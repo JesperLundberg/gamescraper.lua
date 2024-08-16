@@ -3,6 +3,7 @@ local M = {}
 M.steam_api_key = "YOUR_STEAM_API_KEY"
 M.steam_user_id = "YOUR_STEAM_USER_ID"
 
-M.database_path = "YOUR_DATABASE_PATH"
+-- Only change this if you're not running inside a docker container
+M.database_path = "/db/games.db"
 
 return M
