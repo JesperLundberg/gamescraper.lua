@@ -33,5 +33,3 @@ for _, v in pairs(bronze_layer) do
 		playtime_deck_forever = v.playtime_deck_forever,
 	})
 end
-
-utils.tprint(bronze_layer, 0)

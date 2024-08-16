@@ -4,12 +4,9 @@ local sqlite = require("sqlite")
 local utils = require("utils")
 local config = utils.get_config()
 
+--- Create the database and set the schema
+--- @return table The database object
 function M.setup()
-	-- NOTE: Make sure the directory exists
-	-- if not vim.loop.fs_stat(dbdir) then
-	-- 	vim.loop.fs_mkdir(dbdir, 493)
-	-- end
-
 	-- Initialize the database
 	local db = sqlite({
 		uri = config.database_path,
@@ -34,6 +31,10 @@ function M.setup()
 		},
 	})
 
+	-- This automatically creates the path/database if it does not exist
+	db.new(config.database_path)
+
+	-- Return the database object
 	return db
 end
 
