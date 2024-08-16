@@ -2,6 +2,36 @@ local M = {}
 
 local lunajson = require("lunajson")
 
+--- Table inspector
+--- @param tbl table The table to inspect
+--- @param indent number The indentation level
+function M.tprint(tbl, indent)
+	if not indent then
+		indent = 0
+	end
+	local toprint = string.rep(" ", indent) .. "{\r\n"
+	indent = indent + 2
+	for k, v in pairs(tbl) do
+		toprint = toprint .. string.rep(" ", indent)
+		if type(k) == "number" then
+			toprint = toprint .. "[" .. k .. "] = "
+		elseif type(k) == "string" then
+			toprint = toprint .. k .. "= "
+		end
+		if type(v) == "number" then
+			toprint = toprint .. v .. ",\r\n"
+		elseif type(v) == "string" then
+			toprint = toprint .. '"' .. v .. '",\r\n'
+		elseif type(v) == "table" then
+			toprint = toprint .. M.tprint(v, indent + 2) .. ",\r\n"
+		else
+			toprint = toprint .. '"' .. tostring(v) .. '",\r\n'
+		end
+	end
+	toprint = toprint .. string.rep(" ", indent - 2) .. "}"
+	return toprint
+end
+
 --- Convert a JSON string to a table
 --- @param json string The JSON string to convert
 --- @return table The table
@@ -13,7 +43,7 @@ end
 function M.flatten_gamedata(tab)
 	local flattened_table = {}
 
-	for k, v in pairs(tab) do
+	for _, v in pairs(tab) do
 		table.insert(flattened_table, v)
 	end
 

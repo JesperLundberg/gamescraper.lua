@@ -3,19 +3,15 @@ local M = {}
 local shared = require("database.shared")
 
 -- The database
-local db
+local db = shared.setup()
 
 --- Get a record from the database by date
 --- @param date osdate|string The date of the record
 --- @param appid number The appid of the record
---- @return table|boolean The record or false
-function M.get_bronze_data_by_date(date, appid)
-	-- Setup the database
-	db = shared.setup()
-
+--- @return table The record
+function M.get_bronze_data_by_date_and_appid(date, appid)
 	-- Find the record
-	-- return db.bronze_layer:get({ where = { { date = date }, { appid = appid } } }) -- NOTE: NEED to have appid in the where clause as well
-	return db:eval("SELECT * FROM bronze_layer WHERE date = " .. date .. " AND appid =" .. appid)
+	return db.bronze_layer:get({ where = { date = date, appid = appid } })
 end
 
 --- Update a record in the database
@@ -23,28 +19,29 @@ end
 --- @param appid number The appid of the record
 --- @param bronze_data table The table to update
 function M.update_bronze_layer(date, appid, bronze_data)
-	-- Setup the database
-	db = shared.setup()
-
 	-- Find the record and update it
 	db.bronze_layer:update({
-		where = { date = date and { appid = appid } },
-		set = { bronze_layer = bronze_data },
+		where = { date = date, appid = appid },
+		set = {
+			date = bronze_data.date,
+			appid = bronze_data.appid,
+			name = bronze_data.name,
+			playtime_2weeks = bronze_data.playtime_2weeks,
+			playtime_forever = bronze_data.playtime_forever,
+			img_icon_url = bronze_data.img_icon_url,
+			playtime_windows_forever = bronze_data.playtime_windows_forever,
+			playtime_mac_forever = bronze_data.playtime_mac_forever,
+			playtime_linux_forever = bronze_data.playtime_linux_forever,
+			playtime_deck_forever = bronze_data.playtime_deck_forever,
+		},
 	})
 end
 
 --- Insert a new record into the database
 --- @param bronze_data table The table to insert
 function M.insert_bronze_data(bronze_data)
-	-- Setup the database
-	db = shared.setup()
-
-	for k, v in pairs(bronze_data) do
-		print(k, v)
-	end
-
 	-- Find out if the record already exists
-	if M.get_bronze_data_by_date(bronze_data.date, bronze_data.appid) then
+	if M.get_bronze_data_by_date_and_appid(bronze_data.date, bronze_data.appid) ~= {} then
 		-- If it does, update it
 		M.update_bronze_layer(bronze_data.date, bronze_data.appid, bronze_data)
 
@@ -52,11 +49,18 @@ function M.insert_bronze_data(bronze_data)
 		return
 	end
 
-	print("Inserting bronze data")
-
 	-- Otherwise, insert it
 	db.bronze_layer:insert({
-		bronze_layer = bronze_data,
+		date = bronze_data.date,
+		appid = bronze_data.appid,
+		name = bronze_data.name,
+		playtime_2weeks = bronze_data.playtime_2weeks,
+		playtime_forever = bronze_data.playtime_forever,
+		img_icon_url = bronze_data.img_icon_url,
+		playtime_windows_forever = bronze_data.playtime_windows_forever,
+		playtime_mac_forever = bronze_data.playtime_mac_forever,
+		playtime_linux_forever = bronze_data.playtime_linux_forever,
+		playtime_deck_forever = bronze_data.playtime_deck_forever,
 	})
 end
 
