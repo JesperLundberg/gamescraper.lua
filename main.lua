@@ -32,4 +32,8 @@ for _, v in pairs(bronze_layer) do
 		playtime_linux_forever = v.playtime_linux_forever,
 		playtime_deck_forever = v.playtime_deck_forever,
 	})
+
+	print("Inserted: " .. v.name)
 end
+
+print("Done!")
