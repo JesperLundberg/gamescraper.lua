@@ -5,3 +5,6 @@
 # Files
 Dockerfile
 README.md
+
+# Files but with pattern matching
+**/*_spec.lua

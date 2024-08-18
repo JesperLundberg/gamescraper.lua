@@ -45,6 +45,9 @@ function M.insert_bronze_data(bronze_data)
 		-- If it does, update it
 		M.update_bronze_layer(bronze_data.date, bronze_data.appid, bronze_data)
 
+		-- Log the update
+		print(bronze_data.name .. " was updated in the bronze layer.")
+
 		-- Exit early
 		return
 	end
@@ -62,6 +65,8 @@ function M.insert_bronze_data(bronze_data)
 		playtime_linux_forever = bronze_data.playtime_linux_forever,
 		playtime_deck_forever = bronze_data.playtime_deck_forever,
 	})
+
+	print(bronze_data.name .. " was inserted into the bronze layer.")
 end
 
 return M
