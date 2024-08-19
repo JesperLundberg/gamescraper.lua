@@ -5,5 +5,6 @@ M.steam_user_id = "YOUR_STEAM_USER_ID"
 
 -- Only change this if you're not running inside a docker container
 M.database_path = "/db/games.db"
+M.report_path = "/report/"
 
 return M

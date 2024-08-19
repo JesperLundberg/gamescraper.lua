@@ -7,7 +7,7 @@ local db
 
 --- Get a record from the database by date
 --- @param date osdate|string The date of the record
---- @return table The record
+--- @return table {date = osdate|string, json = string} The record
 function M.get_raw_data_by_date(date)
 	-- Setup the database
 	db = shared.setup()

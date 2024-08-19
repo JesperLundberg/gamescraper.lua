@@ -14,6 +14,23 @@ function M.get_bronze_data_by_date_and_appid(date, appid)
 	return db.bronze_layer:get({ where = { date = date, appid = appid } })
 end
 
+--- Get all games played on a specific date
+--- @param date osdate|string The date to get
+--- @return table The records
+function M.get_bronze_data_by_date(date)
+	-- Find the record
+	return db.bronze_layer:select({ where = { date = date } })
+end
+
+--- Get all record between two dates
+--- @param start_date osdate|string The start date
+--- @param end_date osdate|string The end date
+--- @return table The records
+function M.get_bronze_data_between_dates(start_date, end_date)
+	-- Find the record
+	return db.bronze_layer:select({ where = { date = { "BETWEEN", start_date, end_date } } })
+end
+
 --- Update a record in the database
 --- @param date osdate|string The date of the record
 --- @param appid number The appid of the record
