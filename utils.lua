@@ -36,6 +36,10 @@ end
 --- @param json string The JSON string to convert
 --- @return table The table
 function M.json_to_table(json)
+	if not json then
+		error("No JSON string provided")
+	end
+
 	return lunajson.decode(json).response
 end
 

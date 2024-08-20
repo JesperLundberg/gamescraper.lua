@@ -3,7 +3,7 @@ local M = {}
 local shared = require("database.shared")
 
 -- The database
-local db = shared.setup()
+local db = shared.setup("bronze_layer.db")
 
 --- Get a record from the database by date
 --- @param date osdate|string The date of the record
@@ -63,7 +63,7 @@ function M.insert_bronze_data(bronze_data)
 		M.update_bronze_layer(bronze_data.date, bronze_data.appid, bronze_data)
 
 		-- Log the update
-		print(bronze_data.name .. " was updated in the bronze layer.")
+		print(bronze_data.date .. " " .. bronze_data.name .. " was updated in the bronze layer.")
 
 		-- Exit early
 		return
@@ -83,7 +83,7 @@ function M.insert_bronze_data(bronze_data)
 		playtime_deck_forever = bronze_data.playtime_deck_forever,
 	})
 
-	print(bronze_data.name .. " was inserted into the bronze layer.")
+	print(bronze_data.date .. " " .. bronze_data.name .. " was inserted into the bronze layer.")
 end
 
 return M
