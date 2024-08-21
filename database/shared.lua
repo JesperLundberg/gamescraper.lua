@@ -4,16 +4,27 @@ local sqlite = require("sqlite")
 local utils = require("utils")
 local config = utils.get_config()
 
---- Create the database and set the schema
---- @return table The database object
-function M.setup()
+local function create_raw_database(db_name)
 	-- Initialize the database
 	local db = sqlite({
-		uri = config.database_path,
+		uri = config.database_path .. db_name,
 		raw_data = {
 			date = { "date", unique = true, primary = true },
 			json = "text",
 		},
+		opt = {
+			lazy = true,
+		},
+	})
+
+	-- Return the database object
+	return db
+end
+
+local function create_bronze_layer_database(db_name)
+	-- Initialize the database
+	local db = sqlite({
+		uri = config.database_path .. db_name,
 		bronze_layer = {
 			date = "date",
 			appid = "number",
@@ -31,10 +42,24 @@ function M.setup()
 		},
 	})
 
-	-- This automatically creates the path/database if it does not exist
+	-- Return the database object
+	return db
+end
+
+--- Create the database and set the schema
+--- @param db_name string The name of the database (with extension)
+--- @return table The database object
+function M.setup(db_name)
+	local db
+
+	if db_name == "raw_data.db" then
+		db = create_raw_database(db_name)
+	elseif db_name == "bronze_layer.db" then
+		db = create_bronze_layer_database(db_name)
+	end
+
 	db.new(config.database_path)
 
-	-- Return the database object
 	return db
 end
 

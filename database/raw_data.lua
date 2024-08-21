@@ -3,26 +3,32 @@ local M = {}
 local shared = require("database.shared")
 
 -- The database
-local db
+local db = shared.setup("raw_data.db")
 
 --- Get a record from the database by date
 --- @param date osdate|string The date of the record
---- @return table The record
+--- @return table {date = osdate|string, json = string} The record
 function M.get_raw_data_by_date(date)
-	-- Setup the database
-	db = shared.setup()
-
 	-- Find the record
-	return db.raw_data:get({ where = { date = date } })
+	local record = db.raw_data:get({ where = { date = date } })
+
+	local raw_data = {}
+
+	if record then
+		raw_data = {
+			date = record[1].date,
+			json = record[1].json,
+		}
+	end
+
+	-- Return the data or an empty table
+	return raw_data
 end
 
 --- Update a record in the database
 --- @param date osdate|string The date of the record
 --- @param json string The JSON data to update
 function M.update_raw_data(date, json)
-	-- Setup the database
-	db = shared.setup()
-
 	-- Find the record and update it
 	db.raw_data:update({
 		where = { date = date },
@@ -34,9 +40,6 @@ end
 --- @param date osdate|string The date of the record
 --- @param json string The JSON data to insert
 function M.insert_raw_data(date, json)
-	-- Setup the database
-	db = shared.setup()
-
 	-- Find out if the record already exists
 	if M.get_raw_data_by_date(date) then
 		-- If it does, update it

@@ -3,7 +3,7 @@ local M = {}
 local shared = require("database.shared")
 
 -- The database
-local db = shared.setup()
+local db = shared.setup("bronze_layer.db")
 
 --- Get a record from the database by date
 --- @param date osdate|string The date of the record
@@ -12,6 +12,23 @@ local db = shared.setup()
 function M.get_bronze_data_by_date_and_appid(date, appid)
 	-- Find the record
 	return db.bronze_layer:get({ where = { date = date, appid = appid } })
+end
+
+--- Get all games played on a specific date
+--- @param date osdate|string The date to get
+--- @return table The records
+function M.get_bronze_data_by_date(date)
+	-- Find the record
+	return db.bronze_layer:select({ where = { date = date } })
+end
+
+--- Get all record between two dates
+--- @param start_date osdate|string The start date
+--- @param end_date osdate|string The end date
+--- @return table The records
+function M.get_bronze_data_between_dates(start_date, end_date)
+	-- Find the record
+	return db.bronze_layer:select({ where = { date = { "BETWEEN", start_date, end_date } } })
 end
 
 --- Update a record in the database
@@ -46,7 +63,7 @@ function M.insert_bronze_data(bronze_data)
 		M.update_bronze_layer(bronze_data.date, bronze_data.appid, bronze_data)
 
 		-- Log the update
-		print(bronze_data.name .. " was updated in the bronze layer.")
+		print(bronze_data.date .. " " .. bronze_data.name .. " was updated in the bronze layer.")
 
 		-- Exit early
 		return
@@ -66,7 +83,7 @@ function M.insert_bronze_data(bronze_data)
 		playtime_deck_forever = bronze_data.playtime_deck_forever,
 	})
 
-	print(bronze_data.name .. " was inserted into the bronze layer.")
+	print(bronze_data.date .. " " .. bronze_data.name .. " was inserted into the bronze layer.")
 end
 
 return M
