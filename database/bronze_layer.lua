@@ -43,13 +43,7 @@ function M.update_bronze_layer(date, appid, bronze_data)
 			date = bronze_data.date,
 			appid = bronze_data.appid,
 			name = bronze_data.name,
-			playtime_2weeks = bronze_data.playtime_2weeks,
 			playtime_forever = bronze_data.playtime_forever,
-			img_icon_url = bronze_data.img_icon_url,
-			playtime_windows_forever = bronze_data.playtime_windows_forever,
-			playtime_mac_forever = bronze_data.playtime_mac_forever,
-			playtime_linux_forever = bronze_data.playtime_linux_forever,
-			playtime_deck_forever = bronze_data.playtime_deck_forever,
 		},
 	})
 end
@@ -74,13 +68,7 @@ function M.insert_bronze_data(bronze_data)
 		date = bronze_data.date,
 		appid = bronze_data.appid,
 		name = bronze_data.name,
-		playtime_2weeks = bronze_data.playtime_2weeks,
 		playtime_forever = bronze_data.playtime_forever,
-		img_icon_url = bronze_data.img_icon_url,
-		playtime_windows_forever = bronze_data.playtime_windows_forever,
-		playtime_mac_forever = bronze_data.playtime_mac_forever,
-		playtime_linux_forever = bronze_data.playtime_linux_forever,
-		playtime_deck_forever = bronze_data.playtime_deck_forever,
 	})
 
 	print(bronze_data.date .. " " .. bronze_data.name .. " was inserted into the bronze layer.")

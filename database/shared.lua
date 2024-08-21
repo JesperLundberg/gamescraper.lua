@@ -29,13 +29,7 @@ local function create_bronze_layer_database(db_name)
 			date = "date",
 			appid = "number",
 			name = "text",
-			playtime_2weeks = "number",
 			playtime_forever = "number",
-			img_icon_url = "text",
-			playtime_windows_forever = "number",
-			playtime_mac_forever = "number",
-			playtime_linux_forever = "number",
-			playtime_deck_forever = "number",
 		},
 		opt = {
 			lazy = true,
