@@ -11,9 +11,6 @@ function M.create_raw_data_layer(date)
 
 	-- Insert the raw json data into the database
 	database_raw_data.insert_raw_data(date, raw_json)
-
-	-- Log the insert
-	print(date .. " raw data was inserted.")
 end
 
 return M

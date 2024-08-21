@@ -1,24 +1,24 @@
 local database_raw_data = require("database.raw_data")
-local database_bronze_layer = require("database.bronze_layer")
+local database_report_layer = require("database.report_layer")
 local utils = require("utils")
 
 local M = {}
 
---- Create a bronze layer
---- @param date osdate|string The date of the bronze layer
-function M.create_bronze_layer(date)
+--- Create a report layer
+--- @param date osdate|string The date of the report layer
+function M.create_report_layer(date)
 	-- Get the raw data by sent in date or todays date
 	local raw_data = database_raw_data.get_raw_data_by_date(date or os.date("%Y-%m-%d"))
 
 	-- Make the raw json into a table
-	local bronze_layer = utils.json_to_table(raw_data.json)
+	local report_layer = utils.json_to_table(raw_data.json)
 
 	-- Flatten the structure into a table with each row being a table
-	bronze_layer = utils.flatten_gamedata(bronze_layer.games)
+	report_layer = utils.flatten_gamedata(report_layer.games)
 
-	-- Insert the bronze layer into the database (or update if it already exists)
-	for _, v in pairs(bronze_layer) do
-		database_bronze_layer.insert_bronze_data({
+	-- Insert the report layer into the database (or update if it already exists)
+	for _, v in pairs(report_layer) do
+		database_report_layer.insert_report_data({
 			date = date,
 			appid = v.appid,
 			name = v.name,
