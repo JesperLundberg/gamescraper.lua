@@ -46,9 +46,9 @@ end
 function M.setup(db_name)
 	local db
 
-	if db_name == "raw_data.db" then
+	if db_name == "raw_data.sqlite" then
 		db = create_raw_database(db_name)
-	elseif db_name == "report_layer.db" then
+	elseif db_name == "report_layer.sqlite" then
 		db = create_report_layer_database(db_name)
 	end
 

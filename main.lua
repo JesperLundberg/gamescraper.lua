@@ -11,3 +11,5 @@ raw_layer.create_raw_data_layer(date)
 report_layer.create_report_layer(date)
 
 print("Done!")
+
+print(require("database.report_layer").get_report_data_between_dates("2020-01-01", os.date("%Y-%m-%d")))

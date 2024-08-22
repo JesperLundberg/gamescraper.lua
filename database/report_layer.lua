@@ -3,7 +3,7 @@ local M = {}
 local shared = require("database.shared")
 
 -- The database
-local db = shared.setup("report_layer.db")
+local db = shared.setup("report_layer.sqlite")
 
 --- Get a record from the database by date
 --- @param date osdate|string The date of the record
