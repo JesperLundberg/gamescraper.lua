@@ -3,7 +3,7 @@ local M = {}
 local shared = require("database.shared")
 
 -- The database
-local db = shared.setup("raw_data.db")
+local db = shared.setup("raw_data.sqlite")
 
 --- Get a record from the database by date
 --- @param date osdate|string The date of the record
@@ -14,7 +14,7 @@ function M.get_raw_data_by_date(date)
 
 	local raw_data = {}
 
-	if record then
+	if next(record) ~= nil then
 		raw_data = {
 			date = record[1].date,
 			json = record[1].json,
@@ -41,13 +41,19 @@ end
 --- @param json string The JSON data to insert
 function M.insert_raw_data(date, json)
 	-- Find out if the record already exists
-	if M.get_raw_data_by_date(date) then
+	if next(M.get_raw_data_by_date(date)) then
 		-- If it does, update it
 		M.update_raw_data(date, json)
+
+		-- Log the update
+		print(date .. " Raw data was updated.")
 
 		-- Exit early
 		return
 	end
+
+	-- Log the insert
+	print(date .. " Raw data was inserted.")
 
 	-- Otherwise, insert it
 	db.raw_data:insert({

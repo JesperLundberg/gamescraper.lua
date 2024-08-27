@@ -21,11 +21,11 @@ local function create_raw_database(db_name)
 	return db
 end
 
-local function create_bronze_layer_database(db_name)
+local function create_report_layer_database(db_name)
 	-- Initialize the database
 	local db = sqlite({
 		uri = config.database_path .. db_name,
-		bronze_layer = {
+		report_layer = {
 			date = "date",
 			appid = "number",
 			name = "text",
@@ -46,10 +46,10 @@ end
 function M.setup(db_name)
 	local db
 
-	if db_name == "raw_data.db" then
+	if db_name == "raw_data.sqlite" then
 		db = create_raw_database(db_name)
-	elseif db_name == "bronze_layer.db" then
-		db = create_bronze_layer_database(db_name)
+	elseif db_name == "report_layer.sqlite" then
+		db = create_report_layer_database(db_name)
 	end
 
 	db.new(config.database_path)

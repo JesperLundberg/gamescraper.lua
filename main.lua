@@ -1,5 +1,5 @@
 local raw_layer = require("logic.create_raw_data_layer")
-local bronze_layer = require("logic.create_bronze_layer")
+local report_layer = require("logic.create_report_layer")
 
 -- Get todays date in string format
 local date = os.date("%Y-%m-%d")
@@ -7,7 +7,9 @@ local date = os.date("%Y-%m-%d")
 -- Create the raw data layer for todays date
 raw_layer.create_raw_data_layer(date)
 
--- Create the bronze layer for todays date
-bronze_layer.create_bronze_layer(date)
+-- Create the report layer for todays date
+report_layer.create_report_layer(date)
 
 print("Done!")
+
+print(require("database.report_layer").get_report_data_between_dates("2020-01-01", os.date("%Y-%m-%d")))
