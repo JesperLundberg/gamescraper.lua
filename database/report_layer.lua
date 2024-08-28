@@ -11,7 +11,7 @@ local db = shared.setup("report_layer.sqlite")
 --- @return table The record
 function M.get_report_data_by_date_and_appid(date, appid)
 	-- Find the record
-	return db.report_layer:get({ where = { date = date, appid = appid } })
+	return db.report_layer:get({ where = { date_fetched = date, appid = appid } })
 end
 
 --- Get all games played on a specific date
@@ -19,7 +19,7 @@ end
 --- @return table The records
 function M.get_report_data_by_date(date)
 	-- Find the record
-	return db.report_layer:select({ where = { date = date } })
+	return db.report_layer:select({ where = { date_fetched = date } })
 end
 
 --- Get all record between two dates
@@ -27,8 +27,14 @@ end
 --- @param end_date osdate|string The end date
 --- @return table The records
 function M.get_report_data_between_dates(start_date, end_date)
+	-- Note: This will not work as expected because the where clause is overwriting the first ones
+	-- The correct way to do this is to use a single where clause with multiple conditions
 	-- Find the record
-	return db.report_layer:select({ where = { date = { "BETWEEN", start_date, end_date } } })
+
+	-- This does not work either but it cases no error. Look into this!
+	local result = db.report_layer:get({ where = { date_fetched = "<" .. start_date .. ">" .. end_date } })
+
+	return result
 end
 
 --- Update a record in the database
@@ -38,9 +44,9 @@ end
 function M.update_report_layer(date, appid, report_data)
 	-- Find the record and update it
 	db.report_layer:update({
-		where = { date = date, appid = appid },
+		where = { date_fetched = date, appid = appid },
 		set = {
-			date = report_data.date,
+			date_fetched = report_data.date,
 			appid = report_data.appid,
 			name = report_data.name,
 			playtime_forever = report_data.playtime_forever,
@@ -65,7 +71,7 @@ function M.insert_report_data(report_data)
 
 	-- Otherwise, insert it
 	db.report_layer:insert({
-		date = report_data.date,
+		date_fetched = report_data.date,
 		appid = report_data.appid,
 		name = report_data.name,
 		playtime_forever = report_data.playtime_forever,

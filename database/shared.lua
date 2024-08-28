@@ -26,7 +26,7 @@ local function create_report_layer_database(db_name)
 	local db = sqlite({
 		uri = config.database_path .. db_name,
 		report_layer = {
-			date = "date",
+			date_fetched = "text",
 			appid = "number",
 			name = "text",
 			playtime_forever = "number",

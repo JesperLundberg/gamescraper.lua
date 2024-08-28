@@ -12,4 +12,8 @@ report_layer.create_report_layer(date)
 
 print("Done!")
 
-print(require("database.report_layer").get_report_data_between_dates("2020-01-01", os.date("%Y-%m-%d")))
+print(
+	require("utils").tprint(
+		require("database.report_layer").get_report_data_between_dates("2024-08-24", os.date("%Y-%m-%d"))
+	)
+)

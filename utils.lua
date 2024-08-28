@@ -4,7 +4,7 @@ local lunajson = require("lunajson")
 
 --- Table inspector
 --- @param tbl table The table to inspect
---- @param indent number The indentation level
+--- @param indent? number The indentation level
 function M.tprint(tbl, indent)
 	if not indent then
 		indent = 0
