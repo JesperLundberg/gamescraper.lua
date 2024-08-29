@@ -1,6 +1,7 @@
 local M = {}
 
 local shared = require("database.shared")
+local create_report_layer = require("logic.create_report_layer")
 
 -- The database
 local db = shared.setup("report_layer.sqlite")
@@ -23,18 +24,43 @@ function M.get_report_data_by_date(date)
 end
 
 --- Get all record between two dates
---- @param start_date osdate|string The start date
---- @param end_date osdate|string The end date
---- @return table The records
-function M.get_report_data_between_dates(start_date, end_date)
-	-- Note: This will not work as expected because the where clause is overwriting the first ones
-	-- The correct way to do this is to use a single where clause with multiple conditions
-	-- Find the record
+function M.create_report_data_to_today()
+	-- Get the last run date
+	local last_run = db.last_run:get()[1]
 
-	-- This does not work either but it cases no error. Look into this!
-	local result = db.report_layer:get({ where = { date_fetched = "<" .. start_date .. ">" .. end_date } })
+	if next(last_run) == nil then
+		last_run.timestamp = "2020-01-01"
+	end
 
-	return result
+	print(last_run.timestamp)
+
+	-- if the last run date is today, do nothing
+	if last_run.timestamp == os.date("%Y-%m-%d") then
+		return
+	end
+
+	-- For each date between the last run date and today (inclusive),
+	-- run create_report_layer(date)
+	local current_date = last_run.timestamp
+
+	while current_date ~= os.date("%Y-%m-%d") do
+		create_report_layer.create_report_layer(current_date)
+
+		current_date = os.date(
+			"%Y-%m-%d",
+			os.time({
+				year = tonumber(current_date:sub(1, 4)),
+				month = tonumber(current_date:sub(6, 7)),
+				day = tonumber(current_date:sub(9, 10)),
+			} + 86400)
+		)
+	end
+
+	-- Update the last run date
+	db.last_run:update({
+		where = { timestamp = last_run.timestamp },
+		set = { timestamp = os.date("%Y-%m-%d") },
+	})
 end
 
 --- Update a record in the database

@@ -31,6 +31,9 @@ local function create_report_layer_database(db_name)
 			name = "text",
 			playtime_forever = "number",
 		},
+		last_run = {
+			timestamp = { "text", unique = true, primary = true },
+		},
 		opt = {
 			lazy = true,
 		},
