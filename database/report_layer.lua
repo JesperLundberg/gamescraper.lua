@@ -1,7 +1,6 @@
 local M = {}
 
 local shared = require("database.shared")
-local create_report_layer = require("logic.create_report_layer")
 
 -- The database
 local db = shared.setup("report_layer.sqlite")
@@ -23,7 +22,8 @@ function M.get_report_data_by_date(date)
 	return db.report_layer:select({ where = { date_fetched = date } })
 end
 
---- Get all record between two dates
+-- TODO: This needs to be moved, it should not be here, it should be in the logic layer
+-- TODO: Create a timestamp for the last run date (get and update)
 function M.create_report_data_to_today()
 	-- Get the last run date
 	local last_run = db.last_run:get()[1]
@@ -46,6 +46,7 @@ function M.create_report_data_to_today()
 	while current_date ~= os.date("%Y-%m-%d") do
 		create_report_layer.create_report_layer(current_date)
 
+		-- Increment the current date by one day (86400 seconds is one day)
 		current_date = os.date(
 			"%Y-%m-%d",
 			os.time({

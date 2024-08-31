@@ -10,6 +10,11 @@ function M.create_report_layer(date)
 	-- Get the raw data by sent in date or todays date
 	local raw_data = database_raw_data.get_raw_data_by_date(date or os.date("%Y-%m-%d"))
 
+	-- If there is no raw data, return
+	if not raw_data then
+		return
+	end
+
 	-- Make the raw json into a table
 	local report_layer = utils.json_to_table(raw_data.json)
 
@@ -22,13 +27,7 @@ function M.create_report_layer(date)
 			date = date,
 			appid = v.appid,
 			name = v.name,
-			playtime_2weeks = v.playtime_2weeks,
 			playtime_forever = v.playtime_forever,
-			img_icon_url = v.img_icon_url,
-			playtime_windows_forever = v.playtime_windows_forever,
-			playtime_mac_forever = v.playtime_mac_forever,
-			playtime_linux_forever = v.playtime_linux_forever,
-			playtime_deck_forever = v.playtime_deck_forever,
 		})
 	end
 end
