@@ -1,7 +1,6 @@
 local M = {}
 
 local http_request = require("http.request")
-local lunajson = require("lunajson")
 
 local utils = require("utils")
 local config = utils.get_config()
