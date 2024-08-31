@@ -22,44 +22,27 @@ function M.get_report_data_by_date(date)
 	return db.report_layer:select({ where = { date_fetched = date } })
 end
 
--- TODO: This needs to be moved, it should not be here, it should be in the logic layer
--- TODO: Create a timestamp for the last run date (get and update)
-function M.create_report_data_to_today()
-	-- Get the last run date
+--- Get the last run date
+--- @return string|osdate The last run date
+function M.get_last_run()
+	-- Get the last run date from the database
 	local last_run = db.last_run:get()[1]
 
-	if next(last_run) == nil then
-		last_run.timestamp = "2020-01-01"
+	-- If there is no last run date, set it to a date in the past
+	if last_run == nil or next(last_run) == nil then
+		last_run = {}
+		last_run.timestamp = "2024-08-01"
 	end
 
-	print(last_run.timestamp)
+	return last_run.timestamp
+end
 
-	-- if the last run date is today, do nothing
-	if last_run.timestamp == os.date("%Y-%m-%d") then
-		return
-	end
-
-	-- For each date between the last run date and today (inclusive),
-	-- run create_report_layer(date)
-	local current_date = last_run.timestamp
-
-	while current_date ~= os.date("%Y-%m-%d") do
-		create_report_layer.create_report_layer(current_date)
-
-		-- Increment the current date by one day (86400 seconds is one day)
-		current_date = os.date(
-			"%Y-%m-%d",
-			os.time({
-				year = tonumber(current_date:sub(1, 4)),
-				month = tonumber(current_date:sub(6, 7)),
-				day = tonumber(current_date:sub(9, 10)),
-			} + 86400)
-		)
-	end
-
+--- Update the last run date
+--- @param to_update osdate|string The date to update
+function M.update_last_run(to_update)
 	-- Update the last run date
 	db.last_run:update({
-		where = { timestamp = last_run.timestamp },
+		where = { timestamp = to_update },
 		set = { timestamp = os.date("%Y-%m-%d") },
 	})
 end

@@ -12,4 +12,4 @@ report_layer.create_report_layer(date)
 
 print("Done!")
 
-require("database.report_layer").create_report_data_to_today()
+report_layer.create_report_data_to_today()

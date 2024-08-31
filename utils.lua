@@ -2,6 +2,26 @@ local M = {}
 
 local lunajson = require("lunajson")
 
+--- Get the next day
+--- @param date_string string|osdate The date to get the next day from
+--- @return string|osdate The next day
+function M.get_next_day(date_string)
+	-- Parse the input date string
+	local year, month, day = date_string:match("(%d+)-(%d+)-(%d+)")
+
+	-- Convert to numbers
+	year, month, day = tonumber(year), tonumber(month), tonumber(day)
+
+	-- Create a table representing the date
+	local date_table = { year = year, month = month, day = day + 1 }
+
+	-- Calculate the timestamp for the next day
+	local timestamp = os.time(date_table)
+
+	-- Format and return the next day
+	return os.date("%Y-%m-%d", timestamp)
+end
+
 --- Table inspector
 --- @param tbl table The table to inspect
 --- @param indent? number The indentation level
