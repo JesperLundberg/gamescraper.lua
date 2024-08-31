@@ -10,6 +10,11 @@ function M.create_report_layer(date)
 	-- Get the raw data by sent in date or todays date
 	local raw_data = database_raw_data.get_raw_data_by_date(date or os.date("%Y-%m-%d"))
 
+	-- If there is no raw data, return
+	if not next(raw_data) then
+		return
+	end
+
 	-- Make the raw json into a table
 	local report_layer = utils.json_to_table(raw_data.json)
 
@@ -22,15 +27,35 @@ function M.create_report_layer(date)
 			date = date,
 			appid = v.appid,
 			name = v.name,
-			playtime_2weeks = v.playtime_2weeks,
 			playtime_forever = v.playtime_forever,
-			img_icon_url = v.img_icon_url,
-			playtime_windows_forever = v.playtime_windows_forever,
-			playtime_mac_forever = v.playtime_mac_forever,
-			playtime_linux_forever = v.playtime_linux_forever,
-			playtime_deck_forever = v.playtime_deck_forever,
 		})
 	end
+end
+
+function M.create_report_data_to_today()
+	-- Get the last run date
+	local last_run = database_report_layer.get_last_run()
+
+	-- if the last run date is today, do nothing
+	if last_run == os.date("%Y-%m-%d") then
+		return
+	end
+
+	-- For each date between the last run date and today, run create_report_layer(date)
+	local current_date = last_run
+
+	while current_date ~= os.date("%Y-%m-%d") do
+		print("Creating report layer for " .. current_date)
+
+		-- Create the report layer for the current date
+		M.create_report_layer(current_date)
+
+		-- Get the next day in the loop
+		current_date = utils.get_next_day(current_date)
+	end
+
+	-- Update the last run date to today
+	database_report_layer.update_last_run(last_run)
 end
 
 return M

@@ -11,7 +11,7 @@ local db = shared.setup("report_layer.sqlite")
 --- @return table The record
 function M.get_report_data_by_date_and_appid(date, appid)
 	-- Find the record
-	return db.report_layer:get({ where = { date = date, appid = appid } })
+	return db.report_layer:get({ where = { date_fetched = date, appid = appid } })
 end
 
 --- Get all games played on a specific date
@@ -19,16 +19,32 @@ end
 --- @return table The records
 function M.get_report_data_by_date(date)
 	-- Find the record
-	return db.report_layer:select({ where = { date = date } })
+	return db.report_layer:select({ where = { date_fetched = date } })
 end
 
---- Get all record between two dates
---- @param start_date osdate|string The start date
---- @param end_date osdate|string The end date
---- @return table The records
-function M.get_report_data_between_dates(start_date, end_date)
-	-- Find the record
-	return db.report_layer:select({ where = { date = { "BETWEEN", start_date, end_date } } })
+--- Get the last run date
+--- @return string|osdate The last run date
+function M.get_last_run()
+	-- Get the last run date from the database
+	local last_run = db.last_run:get()[1]
+
+	-- If there is no last run date, set it to a date in the past
+	if last_run == nil or next(last_run) == nil then
+		last_run = {}
+		last_run.timestamp = "2024-08-01"
+	end
+
+	return last_run.timestamp
+end
+
+--- Update the last run date
+--- @param to_update osdate|string The date to update
+function M.update_last_run(to_update)
+	-- Update the last run date
+	db.last_run:update({
+		where = { timestamp = to_update },
+		set = { timestamp = os.date("%Y-%m-%d") },
+	})
 end
 
 --- Update a record in the database
@@ -38,9 +54,9 @@ end
 function M.update_report_layer(date, appid, report_data)
 	-- Find the record and update it
 	db.report_layer:update({
-		where = { date = date, appid = appid },
+		where = { date_fetched = date, appid = appid },
 		set = {
-			date = report_data.date,
+			date_fetched = report_data.date,
 			appid = report_data.appid,
 			name = report_data.name,
 			playtime_forever = report_data.playtime_forever,
@@ -65,7 +81,7 @@ function M.insert_report_data(report_data)
 
 	-- Otherwise, insert it
 	db.report_layer:insert({
-		date = report_data.date,
+		date_fetched = report_data.date,
 		appid = report_data.appid,
 		name = report_data.name,
 		playtime_forever = report_data.playtime_forever,
