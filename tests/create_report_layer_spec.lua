@@ -28,5 +28,13 @@ describe("create_report_layer", function()
 
 			assert.is_nil(result)
 		end)
+
+		it("should call the database_raw_data.get_raw_data_by_date with the given date", function()
+			database_raw_data_get_raw_data_by_date_stub.returns({})
+
+			sut.create_report_layer("2021-01-01")
+
+			assert.stub(database_raw_data_get_raw_data_by_date_stub).was_called_with("2021-01-01")
+		end)
 	end)
 end)
