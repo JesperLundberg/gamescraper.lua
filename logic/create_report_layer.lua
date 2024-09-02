@@ -12,7 +12,7 @@ function M.create_report_layer(date)
 
 	-- If there is no raw data, return nil to indicate that nothing was done
 	if not next(raw_data) then
-		return nil
+		return
 	end
 
 	-- Make the raw json into a table
