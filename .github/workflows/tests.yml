@@ -35,6 +35,10 @@ jobs:
           luarocks install luacov
           luarocks install busted
 
+      - name: Run ‘busted’ (dogfood)
+        # disable project-local path prefixes to force use of system installation
+        run: busted --coverage --lpath="" --cpath="" --output=gtest -Xoutput --color
+
       - name: Report test coverage
         if: ${{ success() }}
         continue-on-error: true
