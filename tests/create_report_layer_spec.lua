@@ -5,15 +5,12 @@ local describe, it, assert, stub, before_each, after_each =
 -- System under test
 local sut = require("logic.create_report_layer")
 
--- Get necessary modules in order to stub them
-local database_raw_data = require("database.raw_data")
-
 describe("create_report_layer", function()
 	-- Stubs
 	local database_raw_data_get_raw_data_by_date_stub
 
 	before_each(function()
-		database_raw_data_get_raw_data_by_date_stub = stub(database_raw_data, "get_raw_data_by_date")
+		database_raw_data_get_raw_data_by_date_stub = stub(require("database.raw_data"), "get_raw_data_by_date")
 	end)
 
 	after_each(function()
