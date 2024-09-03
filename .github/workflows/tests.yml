@@ -18,9 +18,6 @@ jobs:
 
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@master
-
       - name: Setup ‘lua’
         uses: leafo/gh-actions-lua@v10
         with:
@@ -34,6 +31,9 @@ jobs:
           luarocks install moonscript
           luarocks install luacov
           luarocks install busted
+
+      - name: Checkout
+        uses: actions/checkout@master
 
       - name: Run ‘busted’ (dogfood)
         # disable project-local path prefixes to force use of system installation
