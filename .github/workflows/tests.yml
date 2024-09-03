@@ -34,10 +34,13 @@ jobs:
           luarocks install moonscript
           luarocks install luacov
           luarocks install busted
+          luarocks install sqlite
+          luarocks install lunajson
+          luarocks install http
 
       - name: Run ‘busted’ (dogfood)
         # disable project-local path prefixes to force use of system installation
-        run: pwd && ls -la && busted tests/ #--coverage --output=gtest -Xoutput --color
+        run: pwd && ls -la && busted tests/ --coverage --output=gtest -Xoutput --color
 
       # - name: Report test coverage
       #   if: ${{ success() }}
