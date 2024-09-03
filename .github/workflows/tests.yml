@@ -15,18 +15,16 @@ jobs:
   busted:
     strategy:
       fail-fast: false
-      matrix:
-        luaVersion: [ "luajit-2.1.0-beta3" ]
 
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@master
 
       - name: Setup ‘lua’
         uses: leafo/gh-actions-lua@v10
         with:
-          luaVersion: ${{ matrix.luaVersion }}
+          luaVersion: "luajit"
 
       - name: Setup ‘luarocks’
         uses: leafo/gh-actions-luarocks@v4
@@ -35,18 +33,10 @@ jobs:
         run: |
           luarocks install moonscript
           luarocks install luacov
-          luarocks install --deps-only busted-scm-1.rockspec
-
-      - name: Build ‘busted’ (bootstrap)
-        run: |
-          luarocks make
-
-      - name: Run ‘busted’ (dogfood)
-        # disable project-local path prefixes to force use of system installation
-        run: busted --coverage --lpath="" --cpath="" --output=gtest -Xoutput --color
+          luarocks install busted
 
       - name: Report test coverage
-        if: ${{ success() && github.repository == 'lunarmodules/busted' }}
+        if: ${{ success() }}
         continue-on-error: true
         run: luacov-coveralls -i src -e .luarocks
         env:
