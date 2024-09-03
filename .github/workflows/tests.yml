@@ -37,7 +37,7 @@ jobs:
 
       - name: Run ‘busted’ (dogfood)
         # disable project-local path prefixes to force use of system installation
-        run: pwd && ls -la && busted test/ #--coverage --output=gtest -Xoutput --color
+        run: pwd && ls -la && busted tests/ #--coverage --output=gtest -Xoutput --color
 
       # - name: Report test coverage
       #   if: ${{ success() }}
