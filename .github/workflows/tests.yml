@@ -11,37 +11,43 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build:
-    name: Run tests
-    runs-on: ubuntu-latest
+
+  busted:
     strategy:
+      fail-fast: false
       matrix:
-        neovim_version: ['nightly']
+        luaVersion: [ "luajit" ]
 
+    runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@main
-      - run: date +%F > todays-date
-      - name: Restore cache for today's nightly.
-        uses: actions/cache@main
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup ‘lua’
+        uses: leafo/gh-actions-lua@v9
         with:
-          path: _neovim
-          key: ${{ runner.os }}-x64-${{ hashFiles('todays-date') }}
+          luaVersion: ${{ matrix.luaVersion }}
 
-      - name: Prepare plenary
+      - name: Setup ‘luarocks’
+        uses: leafo/gh-actions-luarocks@v4
+
+      - name: Setup dependencies
         run: |
-          git clone --depth 1 https://github.com/nvim-lua/plenary.nvim ~/.local/share/nvim/site/pack/vendor/start/plenary.nvim
-          ln -s "$(pwd)" ~/.local/share/nvim/site/pack/vendor/start
+          luarocks install moonscript
+          luarocks install luacov
+          luarocks install --deps-only busted-scm-1.rockspec
 
-      - name: Prepare sqlite.lua
+      - name: Build ‘busted’ (bootstrap)
         run: |
-          git clone --depth 1 https://github.com/kkharji/sqlite.lua ~/.local/share/nvim/site/pack/vendor/start/sqlite.lua
+          luarocks make
 
-      - name: Setup neovim
-        uses: rhysd/action-setup-vim@v1
-        with:
-          neovim: true
-          version: ${{ matrix.neovim_version }}
+      - name: Run ‘busted’ (dogfood)
+        # disable project-local path prefixes to force use of system installation
+        run: busted --coverage --lpath="" --cpath="" --output=gtest -Xoutput --color
 
-      - name: Run tests
-        run: |
-          nvim --headless --noplugin -u tests/minimal.vim -c "PlenaryBustedDirectory tests/ {minimal_init = 'tests/minimal.vim'}"
+      - name: Report test coverage
+        if: ${{ success() && github.repository == 'lunarmodules/busted' }}
+        continue-on-error: true
+        run: luacov-coveralls -i src -e .luarocks
+        env:
+          COVERALLS_REPO_TOKEN: ${{ github.token }}
