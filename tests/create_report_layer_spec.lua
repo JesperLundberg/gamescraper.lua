@@ -7,13 +7,16 @@ local sut = require("logic.create_report_layer")
 
 describe("create_report_layer", function()
 	-- Stubs
+	local database_shared_setup_stub
 	local database_raw_data_get_raw_data_by_date_stub
 
 	before_each(function()
+		database_shared_setup_stub = stub(require("database.shared"), "setup")
 		database_raw_data_get_raw_data_by_date_stub = stub(require("database.raw_data"), "get_raw_data_by_date")
 	end)
 
 	after_each(function()
+		database_shared_setup_stub:revert()
 		database_raw_data_get_raw_data_by_date_stub:revert()
 	end)
 
