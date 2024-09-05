@@ -9,10 +9,12 @@ describe("create_report_layer", function()
 	-- Stubs
 	local database_shared_setup_stub
 	local database_raw_data_get_raw_data_by_date_stub
+	local database_report_layer_insert_report_data_stub
 
 	before_each(function()
 		database_shared_setup_stub = stub(require("database.shared"), "setup")
 		database_raw_data_get_raw_data_by_date_stub = stub(require("database.raw_data"), "get_raw_data_by_date")
+		database_report_layer_insert_report_data_stub = stub(require("database.report_layer"), "insert_report_data")
 	end)
 
 	after_each(function()
@@ -37,9 +39,49 @@ describe("create_report_layer", function()
 			assert.stub(database_raw_data_get_raw_data_by_date_stub).was_called_with("2021-01-01")
 		end)
 
-		it("should call the database_raw_data.insert_report_data with the data in table format", function()
+		it("should call the database_report_data.insert_report_data with the correct table as input", function()
+			local jsonData = [[{
+  "response": {
+    "total_count": 2,
+    "games": [
+      {
+        "appid": 2005010,
+        "name": "Warhammer 40,000: Boltgun",
+        "playtime_2weeks": 276,
+        "playtime_forever": 478,
+        "img_icon_url": "2ffcd2f993a8dac66c8523fb579234ffa2c83bdf",
+        "playtime_windows_forever": 0,
+        "playtime_mac_forever": 0,
+        "playtime_linux_forever": 478,
+        "playtime_deck_forever": 0
+      },
+      {
+        "appid": 274520,
+        "name": "Darkwood",
+        "playtime_2weeks": 213,
+        "playtime_forever": 1451,
+        "img_icon_url": "c8d29a171cab2435eb5d540ed2f03c448ad6de5a",
+        "playtime_windows_forever": 0,
+        "playtime_mac_forever": 0,
+        "playtime_linux_forever": 1314,
+        "playtime_deck_forever": 0
+      }
+    ]
+  }
+}]]
+
 			database_raw_data_get_raw_data_by_date_stub.returns({
-				{ date = "2021-01-01", json = "{}" },
+				date = "2021-01-01",
+				json = jsonData,
+			})
+
+			sut.create_report_layer("2021-01-01")
+
+			assert.stub(database_report_layer_insert_report_data_stub).was_called_with({
+				appid = 274520,
+				date = "2021-01-01",
+				name = "Darkwood",
+				playtime_forever = 1451,
 			})
 		end)
 	end)
