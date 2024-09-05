@@ -7,7 +7,7 @@ local config = utils.get_config()
 local function create_raw_database(db_name)
 	-- Initialize the database
 	local db = sqlite({
-		uri = config.database_path .. db_name,
+		uri = ":inmemory:", -- config.database_path .. db_name,
 		raw_data = {
 			date = { "date", unique = true, primary = true },
 			json = "text",
@@ -24,7 +24,7 @@ end
 local function create_report_layer_database(db_name)
 	-- Initialize the database
 	local db = sqlite({
-		uri = config.database_path .. db_name,
+		uri = ":inmemory:", -- config.database_path .. db_name,
 		report_layer = {
 			date_fetched = "text",
 			appid = "number",

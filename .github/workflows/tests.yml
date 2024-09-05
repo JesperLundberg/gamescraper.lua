@@ -40,7 +40,7 @@ jobs:
 
       - name: Run ‘busted’ (dogfood)
         # disable project-local path prefixes to force use of system installation
-        run: ls && mkdir /db && touch /db/raw_data.sqlite && touch /db/report_layer.sqlite && busted tests/ --coverage --output=gtest -Xoutput --color
+        run: busted tests/ --coverage --output=gtest -Xoutput --color
 
       # - name: Report test coverage
       #   if: ${{ success() }}
