@@ -2,6 +2,7 @@ local M = {}
 
 local shared = require("database.shared")
 
+-- TODO: Refactor this to be usable with tests!
 -- The database
 local db = shared.setup("report_layer.sqlite")
 
