@@ -4,14 +4,14 @@ local shared = require("database.shared")
 
 -- TODO: Refactor this to be usable with tests!
 -- The database
-local db = shared.setup("raw_data.sqlite")
+M.db = {}
 
 --- Get a record from the database by date
 --- @param date osdate|string The date of the record
 --- @return table {date = osdate|string, json = string} The record
 function M.get_raw_data_by_date(date)
 	-- Find the record
-	local record = db.raw_data:get({ where = { date = date } })
+	local record = M.db.raw_data:get({ where = { date = date } })
 
 	local raw_data = {}
 
@@ -31,7 +31,7 @@ end
 --- @param json string The JSON data to update
 function M.update_raw_data(date, json)
 	-- Find the record and update it
-	db.raw_data:update({
+	M.db.raw_data:update({
 		where = { date = date },
 		set = { json = json },
 	})
@@ -57,10 +57,14 @@ function M.insert_raw_data(date, json)
 	print(date .. " Raw data was inserted.")
 
 	-- Otherwise, insert it
-	db.raw_data:insert({
+	M.db.raw_data:insert({
 		date = date,
 		json = json,
 	})
+end
+
+function M.close_db()
+	M.db.raw_data:close()
 end
 
 return M
