@@ -10,7 +10,7 @@ function M.create_report_layer(date)
 	-- Get the raw data by sent in date or todays date
 	local raw_data = database_raw_data.get_raw_data_by_date(date or os.date("%Y-%m-%d"))
 
-	-- If there is no raw data, return
+	-- If there is no raw data, return nil to indicate that nothing was done
 	if not next(raw_data) then
 		return
 	end
