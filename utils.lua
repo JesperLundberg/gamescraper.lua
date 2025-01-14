@@ -74,6 +74,12 @@ function M.flatten_gamedata(tab)
 	return flattened_table
 end
 
+---@class configuration
+---@field database_path string The path to the database
+---@field report_path string The path to the report
+---@field steam_api_key string The Steam API key
+---@field steam_user_id string The Steam user ID
+
 --- Get the configuration from the config_local.lua file if it exists, otherwise get the configuration from the config.lua file
 --- @return configuration|LazyCoreConfig
 function M.get_config()
