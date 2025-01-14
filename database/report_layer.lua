@@ -2,6 +2,7 @@ local M = {}
 
 local shared = require("database.shared")
 
+-- TODO: Refactor this to be usable with tests!
 -- The database
 local db = shared.setup("report_layer.sqlite")
 
@@ -31,7 +32,7 @@ function M.get_last_run()
 	-- If there is no last run date, set it to a date in the past
 	if last_run == nil or next(last_run) == nil then
 		last_run = {}
-		last_run.timestamp = "2024-08-01"
+		last_run.timestamp = "2024-08-20"
 	end
 
 	return last_run.timestamp

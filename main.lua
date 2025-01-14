@@ -1,3 +1,6 @@
+-- Set up the database
+database_raw_data.setup(config.database_path + "raw_data.sqlite")
+
 local raw_layer = require("logic.create_raw_data_layer")
 local report_layer = require("logic.create_report_layer")
 
@@ -14,3 +17,11 @@ raw_layer.create_raw_data_layer(date)
 report_layer.create_report_layer(date)
 
 print("Done!")
+
+-- 1. Create both databases if they do not exist
+--    This by running setup on both
+--    Can the inserts and such be shared? Probably not.
+-- 2. Get the raw data
+-- 3. Create the raw data layer for the date by getting the data
+-- 4. Run the report layer for all previous dates
+-- 5. Create the report layer for the date

@@ -3,7 +3,13 @@ local M = {}
 local shared = require("database.shared")
 
 -- The database
-local db = shared.setup("raw_data.sqlite")
+local db
+
+--- Setup the raw data database connection
+--- @param database_full_path string The full path to the database
+function M.setup(database_full_path)
+	db = shared.setup(database_full_path)
+end
 
 --- Get a record from the database by date
 --- @param date osdate|string The date of the record
@@ -60,6 +66,11 @@ function M.insert_raw_data(date, json)
 		date = date,
 		json = json,
 	})
+end
+
+--- Create the raw data database connection
+function M.close_db()
+	db:close()
 end
 
 return M
