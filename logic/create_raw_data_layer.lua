@@ -2,6 +2,9 @@ local M = {}
 
 local steam_api = require("http.steam_api")
 local database_raw_data = require("database.raw_data")
+local utils = require("utils")
+
+local config = utils.get_config()
 
 --- Create the raw data layer for the given date
 --- @param date osdate|string The date in the format "YYYY-MM-DD"

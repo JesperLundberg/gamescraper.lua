@@ -2,16 +2,21 @@ local M = {}
 
 local shared = require("database.shared")
 
--- TODO: Refactor this to be usable with tests!
 -- The database
-M.db = {}
+local db
+
+--- Setup the raw data database connection
+--- @param database_full_path string The full path to the database
+function M.setup(database_full_path)
+	db = shared.setup(database_full_path)
+end
 
 --- Get a record from the database by date
 --- @param date osdate|string The date of the record
 --- @return table {date = osdate|string, json = string} The record
 function M.get_raw_data_by_date(date)
 	-- Find the record
-	local record = M.db.raw_data:get({ where = { date = date } })
+	local record = db.raw_data:get({ where = { date = date } })
 
 	local raw_data = {}
 
@@ -31,7 +36,7 @@ end
 --- @param json string The JSON data to update
 function M.update_raw_data(date, json)
 	-- Find the record and update it
-	M.db.raw_data:update({
+	db.raw_data:update({
 		where = { date = date },
 		set = { json = json },
 	})
@@ -57,14 +62,15 @@ function M.insert_raw_data(date, json)
 	print(date .. " Raw data was inserted.")
 
 	-- Otherwise, insert it
-	M.db.raw_data:insert({
+	db.raw_data:insert({
 		date = date,
 		json = json,
 	})
 end
 
+--- Create the raw data database connection
 function M.close_db()
-	M.db.raw_data:close()
+	db:close()
 end
 
 return M

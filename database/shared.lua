@@ -66,7 +66,9 @@ end
 function M.setup(db_name)
 	local db
 
-	if db_name == "raw_data.sqlite" or ":inmemory:raw_data.sqlite" then
+	print("db_name", db_name)
+
+	if string.find(db_name, "raw_data") or ":inmemory:raw_data.sqlite" then
 		db = create_raw_database(db_name)
 	elseif db_name == "report_layer.sqlite" or ":inmemory:report_layer.sqlite" then
 		db = create_report_layer_database(db_name)

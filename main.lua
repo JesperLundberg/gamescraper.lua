@@ -1,3 +1,6 @@
+-- Set up the database
+database_raw_data.setup(config.database_path + "raw_data.sqlite")
+
 local raw_layer = require("logic.create_raw_data_layer")
 local report_layer = require("logic.create_report_layer")
 
