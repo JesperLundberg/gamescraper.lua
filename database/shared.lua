@@ -43,6 +43,28 @@ local function create_report_layer_database(db_name)
 	return db
 end
 
+local function create_played_layer_database(db_name)
+	-- Initialize the database
+	local db = sqlite({
+		uri = config.database_path .. db_name,
+		played_layer = {
+			date_fetched = "text",
+			appid = "number",
+			name = "text",
+			playtime_forever = "number",
+		},
+		last_run = {
+			timestamp = { "text", unique = true, primary = true },
+		},
+		opt = {
+			lazy = true,
+		},
+	})
+
+	-- Return the database object
+	return db
+end
+
 --- Create the database and set the schema
 --- @param db_name string The name of the database (with extension)
 --- @return table The database object
@@ -53,6 +75,8 @@ function M.setup(db_name)
 		db = create_raw_database(db_name)
 	elseif db_name == "report_layer.sqlite" then
 		db = create_report_layer_database(db_name)
+	elseif db_name == "played_layer.sqlite" then
+		db = create_played_layer_database(db_name)
 	end
 
 	db.new(config.database_path)
